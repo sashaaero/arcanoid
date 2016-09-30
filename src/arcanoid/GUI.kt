@@ -10,15 +10,20 @@ class GUI(private val game: Game): JFrame(), Runnable{
         Have own thread for drawing
      */
     private val thread = Thread(this)
-    private val drawPanel = DrawPanel(game.ball)
+    private val drawPanel = DrawPanel(game)
 
     init{
         this.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         this.setSize(800, 600)
         this.add(drawPanel)
         this.isVisible = true
+    }
+
+    fun runThread(){
         thread.start()
     }
+
+    fun panelSize() = Pair<Int, Int>(drawPanel.width, drawPanel.height)
 
     override public fun run(){
         while (true) {
@@ -28,7 +33,7 @@ class GUI(private val game: Game): JFrame(), Runnable{
         }
     }
 
-    class DrawPanel(val ball: Ball): JPanel(){
+    class DrawPanel(val game: Game): JPanel(){
         override fun paintBorder(g_: Graphics?) {
             val g = (g_ as Graphics2D)
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
@@ -39,7 +44,7 @@ class GUI(private val game: Game): JFrame(), Runnable{
         override fun paintChildren(g_: Graphics?) {
             val g = (g_ as Graphics2D)
             g.color = Color.RED
-            g.fillOval(ball.x, ball.y, ball.d, ball.d)
+            g.fillOval(game.ball.x, game.ball.y, game.ball.d, game.ball.d)
         }
 
         override fun paintComponent(g_: Graphics?) {
